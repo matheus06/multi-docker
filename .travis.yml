@@ -1,0 +1,22 @@
+udo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t matheus06/react-test -f Dockerfile.dev .
+
+script:
+  - docker run -e CI=true matheus06/react-test npm run test -- --coverage
+
+after_success:
+  - docker build -t matheus06/multi-client ./client
+  - docker build -t matheus06/multi-nginx ./nginx
+  - docker build -t matheus06/react-server ./server
+  - docker build -t matheus06/react-worker ./worker
+# Login to docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+# Push images to repository
+  - docker push matheus06/multi-client
+  - docker push matheus06/multi-nginx
+  - docker push matheus06/react-server
+  - docker push matheus06/react-worker
