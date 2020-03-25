@@ -14,7 +14,7 @@ after_success:
   - docker build -t matheus06/react-server ./server
   - docker build -t matheus06/react-worker ./worker
 # Login to docker CLI failed
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 # Push images to repository
   - docker push matheus06/multi-client
   - docker push matheus06/multi-nginx
